@@ -7,10 +7,13 @@ let buildDir = "build"
 let tempDir = "temp"
 let outputDir = "output"
 let version = FileVersion ("packages" @@ "Alea.CUDA" @@ "lib" @@ "net40" @@ "Alea.CUDA.dll")
+let suffix = match ((getBuildParam "suffix").Trim()) with "" -> None | suffix -> Some suffix
 
 Target "Clean" <| fun _ ->
-    [ buildDir; tempDir; outputDir ]
-    |> CleanDirs
+    [ buildDir; tempDir ] |> CleanDirs
+    match (hasBuildParam "no-clean-output") with
+    | false -> [ outputDir ] |> CleanDirs
+    | true -> ()
 
 Target "Build" <| fun _ ->
     !! "AleaGPUTest.sln"
@@ -27,9 +30,11 @@ Target "Test" <| fun _ ->
 
 Target "Package" <| fun _ ->
     CleanDir tempDir
-
-    let packageName = sprintf "AleaGPUTest.%s" version
-    let packageFileName = sprintf "%s.zip" packageName
+    
+    let packageFileName =
+        match suffix with
+        | Some suffix -> sprintf "AleaGPUTest.%s.%s.zip" version suffix
+        | None -> sprintf "AleaGPUTest.%s.zip" version
 
     // copy alea gpu tools (license manager)
     CopyDir (tempDir @@ "tools") ("packages" @@ "Alea.CUDA" @@ "tools") (fun _ -> true)
