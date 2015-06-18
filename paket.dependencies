@@ -3,8 +3,8 @@ source https://www.nuget.org/api/v2
 source http://nuget.aleacubase.com/nuget
 source http://alpha.aleacubase.com/nuget
 
-nuget Alea.CUDA.Fody 2.1.0.3245-alpha
-nuget Alea.CUDA.Unbound 2.1.0.3245-alpha
+nuget Alea.CUDA.Fody 2.1.0.3253-beta
+nuget Alea.CUDA.Unbound 2.1.0.3253-beta
 nuget FAKE
 nuget NUnit
 nuget NUnit.Runners
